@@ -1,0 +1,13 @@
+{
+  "name": "candares",
+  "version": "1.0.0",
+  "description": "Proyecto para inmobiliaria candares - fullstack",
+  "main": "index.js",
+  "scripts": {
+    "server":"cd server && npm run server",
+    "build":"cd server && npm run build",
+    "dev":"cd client && npm run dev"
+  },
+  "author": "",
+  "license": "ISC"
+}

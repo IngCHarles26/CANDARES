@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Backend del proyecto CANDARES",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc --watch",
+    "server": "node --env-file .env --watch dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [
+    "mysql",
+    "sequelize",
+    "express",
+    "node"
+  ],
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.10",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
