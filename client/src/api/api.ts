@@ -1,5 +1,7 @@
 import axios from "axios";
 
+export const baseUrlFront = 'http://localhost:5173'
+
 const baseURL = 'http://localhost:3001'
 const timeout = 1000
 
@@ -13,7 +15,7 @@ export const postRoutes = {
 }
 
 export const getRoutes = {
-
+  confirmar: '/auth/confirmar/'
 }
 
 export default server

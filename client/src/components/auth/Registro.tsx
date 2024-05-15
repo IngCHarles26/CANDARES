@@ -1,7 +1,8 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { regEmail, regPass } from "../../assets/help";
-import server, { postRoutes } from "../../api/api";
+import server, { baseUrlFront, postRoutes } from "../../api/api";
 import { DataResponse } from "../../assets/types";
+import { useNavigate } from "react-router-dom";
 
 const initialData = {
   nombre:'',
@@ -22,6 +23,8 @@ const infoForm = 'dataForm'
 function Registro() {
   const [dataForm, setDataForm] = useState(initialData);
   const [errors, setErrors] = useState<String[]>([]);
+
+  const nav = useNavigate()
 
   useEffect(() => {
     // si el formulario tubo errores y no fue enviado se recuperan los valores del local storage
@@ -60,9 +63,11 @@ function Registro() {
         mistakes.push(dataPost.message)
         setErrors(mistakes)
       }else{
-        setDataForm(initialData)
         // solo limpiamos el local storage cuando se ha enviado exitosamente la informacion
         localStorage.removeItem(infoForm)
+        setDataForm(initialData)
+        const msg = 'Hemos enviado un Email de confirmacion, presiona en el enlace'
+        nav('/auth/mensaje/'+msg,{relative:'path'})
       }
       
     } catch (error) {
