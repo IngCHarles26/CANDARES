@@ -18,7 +18,10 @@ export const registrar = async (req:Req,res:Res)=>{
   try {
     // buscamos si el email ya se encuentra registrado
     const exist = await Usuario.findOne({where: {email}})
-    if(exist) return res.status(200).send({success: false, message: 'El usuario ya está registrado'})
+    if(exist) return res.status(200).send({
+      success: false, 
+      message: 'El usuario ya está registrado'
+    })
 
     // encriptamos la contraseña y generamos el token
     const salt = await bcrypt.genSalt(10)
@@ -27,27 +30,34 @@ export const registrar = async (req:Req,res:Res)=>{
 
     // creamos el usuario y le enviamos el email de confirmaicon
     await Usuario.create({email,nombre,password,token});
-    emailRegistro({email,nombre,token})
-
+    emailRegistro(nombre,email,token)
+    
     // terminamos con el controller
-    return res.status(200).send({success: true, message: 'Registro exitoso'})
+    return res.status(200).send({
+      success: true, 
+      message: 'Registro exitoso'
+    })
     
   } catch (error) {
-
-    res.status(500).send({success: false,message:'Algo Fallo'})
-
+    
+    res.status(500).send({
+      success: false,
+      message:'Algo Fallo'
+    })
+    
   }
 }
 
+// GET auth/confirmar/:token
 export const confirmar = async (req:Req,res:Res)=>{
-
+  
   const {token} = req.params
-
+  
   try {
     
     // verificar que el token es valido
     let usuario:Usuario | null  = await Usuario.findOne({where:{token}})
-
+    
     if(!usuario) return res.status(200).send({success: false, message: 'Usuario no encontrado'})
     // confirmar la cuenta
 
@@ -62,5 +72,29 @@ export const confirmar = async (req:Req,res:Res)=>{
     res.status(500).send(error)
   }
 
+
+}
+
+// POST auth/olvide-pass
+export const resetPass = async (req:Req,res:Res)=>{
+
+  const {email} = req.body;
+
+  const user = await Usuario.findOne({where:{email}})
+
+  if(!user) return res.status(200).send({
+    success: false, 
+    message: 'Usuario no encontrado'
+  })
+
+  user.token = genToken();
+  await user.save();
+  emailRegistro(user.nombre,email,user.token)
+
+
+  res.status(200).send({
+    success: true, 
+    message: 'Dirigete al enlace'
+  })
 
 }

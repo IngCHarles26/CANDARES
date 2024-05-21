@@ -11,7 +11,8 @@ const server = axios.create({
 })
 
 export const postRoutes = {
-  registro: '/auth/registro'
+  registro: '/auth/registro',
+  recupera: '/auth/olvide-pass',
 }
 
 export const getRoutes = {

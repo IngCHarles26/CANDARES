@@ -3,16 +3,11 @@ import nodemailer from 'nodemailer'
 const baseRouteFront = process.env.FRONTEND_URL || ''
 const route = process.env.ROUTE_URL || ''
 
-interface Datos {
-  nombre: string,
-  email: string,
-  token: string
-}
 
 // @ts-ignore
 const port:number = +process.env.EMAIL_PORT;
 
-export const emailRegistro = async (datos:Datos)=>{
+export const emailRegistro = async (nombre:string,email:string,token:string)=>{
   const transport = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: port, 
@@ -22,7 +17,6 @@ export const emailRegistro = async (datos:Datos)=>{
     }
   });
 
-  const {email,nombre,token} = datos
 
   await transport.sendMail({
     from: 'CANDARES',
@@ -39,4 +33,26 @@ export const emailRegistro = async (datos:Datos)=>{
       <p>Si no creaste la cuenta, puedes ignorar el mensaje</p>
     `
   })
+}
+
+type Tipo = 'registro' | 'recuperar-pass'
+
+export const sendMail = async (nombre:string,email:string,token:string,tipo:Tipo)=>{
+  const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: port, 
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  const from = 'CANDARES'
+  const to = email
+  const subject = {
+    registro: 'CONFIRMA TU CUENTA EN CANDARES.com',
+    'recuperar-pass': 'RESTABLECE TU PASSWORD EN CANDARES.com',
+  }[tipo]
+  const text = subject
+  
 }
